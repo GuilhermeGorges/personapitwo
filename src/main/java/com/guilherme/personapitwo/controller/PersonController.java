@@ -10,6 +10,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
+import java.util.List;
 
 @RestController
 @RequestMapping("/api/v1/people")
@@ -29,5 +30,12 @@ public class PersonController {
     @ApiOperation(value = "Create a new person")
     public MessageRespondeDTO createPerson(@RequestBody @Valid PersonDTO personDTO) {
         return personService.createPerson(personDTO);
+    }
+
+    @GetMapping
+    @ApiOperation(value = "Create a new person")
+    public List<PersonDTO> listAll(){
+        return personService.listAll();
+
     }
 }
