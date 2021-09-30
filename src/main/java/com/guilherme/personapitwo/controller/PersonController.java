@@ -2,6 +2,7 @@ package com.guilherme.personapitwo.controller;
 
 import com.guilherme.personapitwo.dto.request.PersonDTO;
 import com.guilherme.personapitwo.dto.response.MessageRespondeDTO;
+import com.guilherme.personapitwo.exception.PersonNotFoundException;
 import com.guilherme.personapitwo.service.PersonService;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
@@ -33,14 +34,23 @@ public class PersonController {
     }
 
     @GetMapping
-    @ApiOperation(value = "Create a new person")
+    @ApiOperation(value = "List all people")
     public List<PersonDTO> listAll(){
         return personService.listAll();
 
     }
 
     @GetMapping("/{id}")
-    public PersonDTO findById(Long id){
+    @ApiOperation(value = "Find a person by ID")
+    public PersonDTO findById(@PathVariable Long id){
         return personService.findById(id);
     }
+
+    @DeleteMapping("/{id}")
+    @ResponseStatus(HttpStatus.NO_CONTENT)
+    @ApiOperation(value = "Delete a person with ID")
+    public void deleteById(@PathVariable Long id) throws PersonNotFoundException {
+        personService.delete(id);
+    }
+    
 }

@@ -48,4 +48,7 @@ public class PersonService {
                 .orElseThrow(() -> new ProviderNotFoundException());
         return personMapper.toDTO(person);
     }
+
+    public void delete(Long id) {
+    }
 }
