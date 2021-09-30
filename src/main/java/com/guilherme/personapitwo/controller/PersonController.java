@@ -46,11 +46,17 @@ public class PersonController {
         return personService.findById(id);
     }
 
+    @PutMapping("/{id}")
+    @ApiOperation(value = "Update person")
+    public MessageRespondeDTO updateById(@PathVariable Long id, @RequestBody PersonDTO personDTO) throws PersonNotFoundException {
+        return personService.updateById(id, personDTO);
+    }
+
     @DeleteMapping("/{id}")
     @ResponseStatus(HttpStatus.NO_CONTENT)
     @ApiOperation(value = "Delete a person with ID")
     public void deleteById(@PathVariable Long id) throws PersonNotFoundException {
         personService.delete(id);
     }
-    
+
 }

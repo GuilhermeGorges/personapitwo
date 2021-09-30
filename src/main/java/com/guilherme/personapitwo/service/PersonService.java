@@ -11,7 +11,6 @@ import org.springframework.stereotype.Service;
 
 import java.nio.file.ProviderNotFoundException;
 import java.util.List;
-import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Service
@@ -30,10 +29,7 @@ public class PersonService {
         Person personToSave = personMapper.toModel(personDTO);
 
         Person savedPerson = personRepository.save(personToSave);
-        return MessageRespondeDTO
-                .builder()
-                .message("Created person with ID " + savedPerson.getId())
-                .build();
+        return createMassegeResponse(savedPerson.getId(), "Created person with ID");
     }
 
     public List<PersonDTO> listAll() {
@@ -42,13 +38,35 @@ public class PersonService {
                 .map(personMapper::toDTO)
                 .collect(Collectors.toList());
     }
-
     public PersonDTO findById(Long id) {
         Person person = personRepository.findById(id)
                 .orElseThrow(() -> new ProviderNotFoundException());
         return personMapper.toDTO(person);
     }
 
-    public void delete(Long id) {
+    public MessageRespondeDTO updateById(Long id, PersonDTO personDTO) throws PersonNotFoundException {
+        verityIfExists(id);
+
+        Person personToSave = personMapper.toModel(personDTO);
+
+        Person savedPerson = personRepository.save(personToSave);
+        return createMassegeResponse(savedPerson.getId(), "Updated person with ID");
+    }
+
+    public void delete(Long id) throws PersonNotFoundException{
+        verityIfExists(id);
+        personRepository.deleteById(id);
+    }
+
+    private Person verityIfExists(Long id) throws PersonNotFoundException{
+        return personRepository.findById(id)
+                .orElseThrow(() -> new PersonNotFoundException(id));
+    }
+
+    private MessageRespondeDTO createMassegeResponse(Long id, String massege) {
+        return MessageRespondeDTO
+                .builder()
+                .message(massege + id)
+                .build();
     }
 }
