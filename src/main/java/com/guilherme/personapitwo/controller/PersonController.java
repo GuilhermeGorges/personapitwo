@@ -38,4 +38,9 @@ public class PersonController {
         return personService.listAll();
 
     }
+
+    @GetMapping("/{id}")
+    public PersonDTO findById(Long id){
+        return personService.findById(id);
+    }
 }
